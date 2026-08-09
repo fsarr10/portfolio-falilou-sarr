@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="a" cx="20%" cy="20%" r="70%">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset=".55" stop-color="#050816"/>
+      <stop offset="1" stop-color="#020617"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#a)"/>
+  <g opacity=".18" stroke="#22d3ee">
+    <path d="M0 120h1200M0 240h1200M0 360h1200M0 480h1200M160 0v630M320 0v630M480 0v630M640 0v630M800 0v630M960 0v630"/>
+  </g>
+  <text x="82" y="250" fill="#f8fafc" font-family="Arial, sans-serif" font-size="66" font-weight="700">Mouhamadou Falilou Sarr</text>
+  <text x="86" y="330" fill="#22d3ee" font-family="Arial, sans-serif" font-size="38" font-weight="700">Développeur Full Stack • DevOps • Cybersécurité</text>
+  <text x="86" y="400" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="28">Applications modernes, performantes et sécurisées</text>
+</svg>
