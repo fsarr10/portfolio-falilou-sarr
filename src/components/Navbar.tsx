@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Github, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { DownloadCVButton } from "@/components/DownloadCVButton";
@@ -9,6 +9,25 @@ import { useLanguage } from "@/components/Providers";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { identity, navigation } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
+
+function GitHubNavButton({ compact = false, label }: { compact?: boolean; label: string }) {
+  return (
+    <a
+      href={identity.github}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={label}
+      title={label}
+      className={cn(
+        "inline-flex shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-200 transition hover:border-cyan/40 hover:bg-cyan/10 hover:text-cyan light:border-slate-200 light:bg-white light:text-slate-700",
+        compact ? "h-10 w-10" : "gap-2 px-3 py-2 text-sm font-semibold"
+      )}
+    >
+      <Github className="h-4 w-4" />
+      {!compact ? <span>GitHub</span> : null}
+    </a>
+  );
+}
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -32,6 +51,7 @@ export function Navbar() {
         Contact: "Contact"
       } as Record<string, string>)[label] || label
     );
+  const githubLabel = t("Voir mon GitHub", "View my GitHub");
 
   useEffect(() => {
     const onScroll = () => {
@@ -75,19 +95,23 @@ export function Navbar() {
           ))}
         </div>
         <div className="hidden items-center gap-2 xl:flex">
+          <GitHubNavButton label={githubLabel} />
           <LanguageToggle />
           <ThemeToggle />
           <DownloadCVButton variant="compact" />
         </div>
-        <button
-          type="button"
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 xl:hidden light:border-slate-200"
-          onClick={() => setOpen((value) => !value)}
-          aria-label={open ? t("Fermer le menu", "Close menu") : t("Ouvrir le menu", "Open menu")}
-          aria-expanded={open}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 xl:hidden">
+          <GitHubNavButton compact label={githubLabel} />
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 light:border-slate-200"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? t("Fermer le menu", "Close menu") : t("Ouvrir le menu", "Open menu")}
+            aria-expanded={open}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
       {open ? (
         <div className="border-t border-white/10 bg-ink/95 px-4 py-4 xl:hidden light:border-slate-200 light:bg-white">

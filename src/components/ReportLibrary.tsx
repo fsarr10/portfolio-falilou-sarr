@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Eye, FileText, Search } from "lucide-react";
+import { Download, Eye, FileText, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useLanguage } from "@/components/Providers";
 import { externalLinkProps } from "@/lib/utils";
@@ -9,6 +9,27 @@ import type { Report } from "@/types/portfolio";
 type ReportWithStatus = Report & {
   exists: boolean;
 };
+
+const normalizeSearchValue = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[-_/.,;:()]+/g, " ")
+    .toLowerCase()
+    .trim();
+
+const searchableReportText = (report: ReportWithStatus) =>
+  normalizeSearchValue(
+    [
+      report.title,
+      report.description,
+      report.category,
+      report.format,
+      report.slug,
+      report.file?.split("/").pop() ?? "",
+      report.externalUrl ?? ""
+    ].join(" ")
+  );
 
 export function ReportLibrary({
   reports,
@@ -27,16 +48,20 @@ export function ReportLibrary({
   );
 
   const filteredReports = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
+    const normalizedQuery = normalizeSearchValue(query);
+    const queryTokens = normalizedQuery.split(/\s+/).filter(Boolean);
     return reports.filter((report) => {
       const matchesCategory = activeCategory === "Tous" || report.category === activeCategory;
-      const matchesQuery =
-        !normalizedQuery ||
-        report.title.toLowerCase().includes(normalizedQuery) ||
-        report.description.toLowerCase().includes(normalizedQuery);
+      const reportText = searchableReportText(report);
+      const matchesQuery = queryTokens.length === 0 || queryTokens.every((token) => reportText.includes(token));
       return matchesCategory && matchesQuery;
     });
   }, [activeCategory, query, reports]);
+
+  const resetSearch = () => {
+    setQuery("");
+    setActiveCategory("Tous");
+  };
 
   return (
     <>
@@ -49,9 +74,19 @@ export function ReportLibrary({
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder={t("Rechercher un rapport...", "Search reports...")}
-                className="input pl-10"
+                placeholder={t("Titre, thème, fichier...", "Title, topic, file...")}
+                className="input pl-10 pr-10"
               />
+              {query ? (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-slate-400 transition hover:bg-white/10 hover:text-white light:hover:bg-slate-100 light:hover:text-slate-800"
+                  aria-label={t("Effacer la recherche", "Clear search")}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              ) : null}
             </label>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
@@ -75,6 +110,11 @@ export function ReportLibrary({
               `${filteredReports.length} rapport${filteredReports.length > 1 ? "s" : ""} affiché${filteredReports.length > 1 ? "s" : ""}.`,
               `${filteredReports.length} report${filteredReports.length > 1 ? "s" : ""} shown.`
             )}
+            {(query || activeCategory !== "Tous") ? (
+              <button type="button" onClick={resetSearch} className="ml-3 font-semibold text-cyan hover:underline">
+                {t("Réinitialiser", "Reset")}
+              </button>
+            ) : null}
           </p>
         </div>
       ) : null}
@@ -141,7 +181,14 @@ export function ReportLibrary({
       ) : (
         <div className="glass rounded-lg p-6 text-center">
           <p className="font-semibold">{t("Aucun rapport trouvé", "No report found")}</p>
-          <p className="muted mt-2 text-sm">{t("Essayez un autre mot-clé ou réinitialisez le filtre.", "Try another keyword or reset the filter.")}</p>
+          <p className="muted mt-2 text-sm">{t("Essayez un autre mot-clé, sans accent, ou réinitialisez les filtres.", "Try another keyword, without accents, or reset filters.")}</p>
+          <button
+            type="button"
+            onClick={resetSearch}
+            className="mt-4 inline-flex rounded-lg border border-white/15 px-4 py-2 text-sm font-semibold transition hover:bg-white/10 light:border-slate-200"
+          >
+            {t("Réinitialiser la recherche", "Reset search")}
+          </button>
         </div>
       )}
     </>

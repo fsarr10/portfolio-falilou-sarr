@@ -240,14 +240,6 @@ export const reports: Report[] = [
     format: "PDF"
   },
   {
-    title: "Radius SSH Cisco",
-    slug: "radius-ssh-cisco",
-    description: "Rapport PDF consultable en ligne et téléchargeable.",
-    file: "/reports/radius-ssh-cisco.pdf",
-    category: "Rapport PDF",
-    format: "PDF"
-  },
-  {
     title: "Rapport admin réseaux Linux",
     slug: "rapport-admin-reseaux-linux",
     description: "Rapport PDF consultable en ligne et téléchargeable.",
@@ -260,14 +252,6 @@ export const reports: Report[] = [
     slug: "rapport-apache-python",
     description: "Rapport PDF consultable en ligne et téléchargeable.",
     file: "/reports/rapport-apache-python.pdf",
-    category: "Rapport PDF",
-    format: "PDF"
-  },
-  {
-    title: "Rapport architecture sécurisée",
-    slug: "rapport-architecture-securise",
-    description: "Rapport PDF consultable en ligne et téléchargeable.",
-    file: "/reports/rapport-architecture-securise.pdf",
     category: "Rapport PDF",
     format: "PDF"
   },
@@ -328,18 +312,10 @@ export const reports: Report[] = [
     format: "PDF"
   },
   {
-    title: "Rapport crypto",
+    title: "Rapport cryptographie",
     slug: "rapport-crypto",
     description: "Rapport PDF consultable en ligne et téléchargeable.",
     file: "/reports/rapport-crypto.pdf",
-    category: "Rapport PDF",
-    format: "PDF"
-  },
-  {
-    title: "Rapport cryptographie",
-    slug: "rapport-cryptographie",
-    description: "Rapport PDF consultable en ligne et téléchargeable.",
-    file: "/reports/rapport-cryptographie.pdf",
     category: "Rapport PDF",
     format: "PDF"
   },
